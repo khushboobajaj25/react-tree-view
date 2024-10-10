@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
+import RulesView from "./treeview/RulesView";
+import { createContext, useState } from "react";
+export const AppContext = createContext();
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    const [dataQualityStates, setDataQualityStates] = useState({
+        addMoreColumnRules: {},
+        baselineRules: {},
+        columnLevelRules: {},
+        
+    });
+    return (
+        <AppContext.Provider
+            value={{ dataQualityStates, setDataQualityStates }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <RulesView />
+        </AppContext.Provider>
+    );
 }
 
 export default App;

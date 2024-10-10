@@ -1,0 +1,23 @@
+.grid-container {
+    display: grid; /* Enables CSS Grid */
+    grid-template-columns: repeat(12, 1fr); /* Defines a 12-column grid */
+    gap: 20px; /* Adds spacing between grid items */
+}
+
+.grid-item:nth-child(1) {
+    grid-column: span 3; /* Item 1 spans 3 columns */
+}
+
+.grid-item:nth-child(2) {
+    grid-column: span 5; /* Item 2 spans 4 columns */
+}
+
+.grid-item:nth-child(3) {
+    grid-column: span 4; /* Item 3 spans 5 columns */
+}
+
+.grid-item {
+    background-color: lightblue;
+    padding: 10px;
+    /* text-align: center; */
+}
