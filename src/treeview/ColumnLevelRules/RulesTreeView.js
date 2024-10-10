@@ -4,7 +4,6 @@ import { IoMdArrowDropright } from "react-icons/io";
 import TreeView, { flattenTree } from "react-accessible-treeview";
 import cx from "classnames";
 import "./styles.css";
-import { sampleTreeData } from "./treeData";
 import { FcEditImage } from "react-icons/fc";
 import { IoFilterCircleOutline } from "react-icons/io5";
 import { BsEyeFill } from "react-icons/bs";
@@ -12,13 +11,16 @@ import AddMoreRulesModal from "../AddMoreRules/AddMoreRulesModal";
 import { AppContext } from "../../App";
 import RulesModal from "./RulesModal";
 
-const data = flattenTree(sampleTreeData);
+
 
 function RulesTreeView() {
-    const [selectedIds, setSelectedIds] = useState(sampleTreeData.selectedIds);
+    
     const { dataQualityStates, setDataQualityStates } = useContext(AppContext);
+    const{columnLevelRules} = dataQualityStates
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalElement, setModalElement] = useState();
+    const data = flattenTree(columnLevelRules);
+    const [selectedIds, setSelectedIds] = useState(columnLevelRules.selectedIds);
 
     const [isDropped, setIsDropped] = useState(false);
     const onDragOver = (event) => {

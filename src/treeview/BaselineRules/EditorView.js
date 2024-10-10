@@ -1,23 +1,16 @@
 import { Editor } from "@monaco-editor/react";
-import React from "react";
+import React, { useContext } from "react";
 import { editorData } from "./editorData";
+import { AppContext } from "../../App";
 
 export default function EditorView() {
-    const customStyles = {
-        content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-        },
-    };
+    const{dataQualityStates,setDataQualityStates} = useContext(AppContext)
+    const{baselineRules} =  dataQualityStates
     return (
         <Editor
             height="90vh"
             defaultLanguage="json"
-            value={JSON.stringify(editorData, null, 4)}
+            value={JSON.stringify(baselineRules, null, 4)}
             defaultValue="// some comment"
         />
     );
