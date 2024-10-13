@@ -16,7 +16,6 @@ export default function RulesModal({ isOpen, treeElement, setModalOpen }) {
     };
     const defaultValue = treeElement.metadata[treeElement.modalKey];
     const [editorValue, setEditorValue] = useState(defaultValue);
-    console.log(treeElement);
 
     return (
         <Modal

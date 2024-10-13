@@ -1,25 +1,36 @@
-import logo from "./logo.svg";
-import "./App.css";
+import { createContext, useEffect, useState } from "react";
+import RulesView from "./karan_treeview/RulesView";
+import { apiEditorData } from "./karan_treeview/mockData";
+import { getTreeViewData, removeField } from "./karan_treeview/utils";
 
-import RulesView from "./treeview/RulesView";
-import { createContext, useState } from "react";
-import { editorData } from "./treeview/BaselineRules/editorData";
-import { sampleTreeData } from "./treeview/ColumnLevelRules/treeData";
 export const AppContext = createContext();
 function App() {
-    const [dataQualityStates, setDataQualityStates] = useState({
-        addMoreColumnRules: {},
-        baselineRules: editorData,
-        columnLevelRules: sampleTreeData,
-        
+  const [dataQualityStates, setDataQualityStates] = useState(null);
+
+  useEffect(() => {
+    const baseLinesRules = JSON.parse(JSON.stringify(apiEditorData));
+    removeField(baseLinesRules, "optional");
+    setDataQualityStates({
+      ...dataQualityStates,
+      addMoreColumnRules: apiEditorData,
+      baselineRules: baseLinesRules,
+      columnLevelRules: getTreeViewData(apiEditorData),
     });
-    return (
+  }, []);
+
+  console.log(dataQualityStates);
+
+  return (
+    <>
+      {dataQualityStates && (
         <AppContext.Provider
-            value={{ dataQualityStates, setDataQualityStates }}
+          value={{ dataQualityStates, setDataQualityStates }}
         >
-            <RulesView />
+          <RulesView />
         </AppContext.Provider>
-    );
+      )}
+    </>
+  );
 }
 
 export default App;

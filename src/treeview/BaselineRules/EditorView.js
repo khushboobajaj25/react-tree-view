@@ -1,6 +1,6 @@
 import { Editor } from "@monaco-editor/react";
 import React, { useContext } from "react";
-import { editorData } from "./editorData";
+import { apiEditorData } from "./apiEditorData";
 import { AppContext } from "../../App";
 
 export default function EditorView() {
