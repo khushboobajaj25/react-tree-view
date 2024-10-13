@@ -1,67 +1,31 @@
-import React, { useContext, useState } from "react";
-import { FaSquare, FaCheckSquare, FaMinusSquare } from "react-icons/fa";
-import { IoMdArrowDropright } from "react-icons/io";
-import TreeView, { flattenTree } from "react-accessible-treeview";
 import cx from "classnames";
-import "./styles.css";
+import React, { useContext, useState } from "react";
+import TreeView, { flattenTree } from "react-accessible-treeview";
+import { FaCheckSquare, FaMinusSquare, FaSquare } from "react-icons/fa";
+import { IoMdArrowDropright } from "react-icons/io";
 import { AppContext } from "../../App";
-
-const folder = {
-  name: "",
-  children: [
-    {
-      name: "Fruits",
-      children: [
-        { name: "Avocados" },
-        { name: "Bananas" },
-        { name: "Berries" },
-        { name: "Oranges" },
-        { name: "Pears" },
-      ],
-    },
-    {
-      name: "Drinks",
-      children: [
-        { name: "Apple Juice" },
-        { name: "Chocolate" },
-        { name: "Coffee" },
-        {
-          name: "Tea",
-          children: [
-            { name: "Black Tea" },
-            { name: "Green Tea" },
-            { name: "Red Tea" },
-            { name: "Matcha" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Vegetables",
-      children: [
-        {
-          name: "Beets",
-          children: [
-            { name: "Beets" },
-            { name: "Carrots" },
-            { name: "Celery" },
-            { name: "Lettuce" },
-            { name: "Onions" },
-          ],
-        },
-        { name: "Carrots" },
-        { name: "Celery" },
-        { name: "Lettuce" },
-        { name: "Onions" },
-      ],
-    },
-  ],
-};
+import "./styles.css";
 
 function RulesTreeView() {
   const { dataQualityStates } = useContext(AppContext);
+  const [selectedIds, setSelectedIds] = useState(dataQualityStates.columnLevelRules.children[0].metadata.selectedIds);
   const data = flattenTree(dataQualityStates.columnLevelRules);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const baseLineRules = dataQualityStates.baselineRules;
+
+  const handleCheckBoxSelect = (e) => {
+    const index = selectedIds.indexOf(e.id);
+    if (index > -1) {
+      setSelectedIds(selectedIds.filter((id) => id !== e.id));
+    } else {
+      setSelectedIds([...selectedIds, e.id]);
+    }
+
+    if (baseLineRules[e.metadata.parent][e.name]) {
+      delete baseLineRules[e.metadata.parent][e.name];
+    } else {
+      baseLineRules[e.metadata.parent][e.name] = { value: e.metadata.value, filter: e.metadata.filter };
+    }
+  };
 
   return (
     <div className="checkbox">
@@ -74,20 +38,7 @@ function RulesTreeView() {
         propagateSelect
         propagateSelectUpwards
         togglableSelect
-        onSelect={(props) => console.log("onSelect callback: ", props)}
-        onNodeSelect={(props) => console.log("onNodeSelect callback: ", props)}
-        nodeRenderer={({
-          element,
-          isBranch,
-          isExpanded,
-          isSelected,
-          isHalfSelected,
-          isDisabled,
-          getNodeProps,
-          level,
-          handleSelect,
-          handleExpand,
-        }) => {
+        nodeRenderer={({ element, isBranch, isExpanded, isSelected, isHalfSelected, isDisabled, getNodeProps, level, handleSelect, handleExpand }) => {
           return (
             <div
               {...getNodeProps({ onClick: handleExpand })}
@@ -97,17 +48,18 @@ function RulesTreeView() {
               }}
             >
               {isBranch && <ArrowIcon isOpen={isExpanded} />}
-              <CheckBoxIcon
-                className="checkbox-icon"
-                onClick={(e) => {
-                  handleSelect(e);
-                  e.stopPropagation();
-                }}
-                variant={isHalfSelected ? "some" : isSelected ? "all" : "none"}
-              />
-              <span className="name">
-                {element.name}-{element.id}
-              </span>
+              {!isBranch && (
+                <CheckBoxIcon
+                  className="checkbox-icon"
+                  onClick={(e) => {
+                    handleSelect(e);
+                    handleCheckBoxSelect(element);
+                    e.stopPropagation();
+                  }}
+                  variant={isHalfSelected ? "some" : isSelected ? "all" : "none"}
+                />
+              )}
+              <span className="name">{element.name}</span>
             </div>
           );
         }}
@@ -118,12 +70,7 @@ function RulesTreeView() {
 
 const ArrowIcon = ({ isOpen, className }) => {
   const baseClass = "arrow";
-  const classes = cx(
-    baseClass,
-    { [`${baseClass}--closed`]: !isOpen },
-    { [`${baseClass}--open`]: isOpen },
-    className
-  );
+  const classes = cx(baseClass, { [`${baseClass}--closed`]: !isOpen }, { [`${baseClass}--open`]: isOpen }, className);
   return <IoMdArrowDropright className={classes} />;
 };
 

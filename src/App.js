@@ -18,8 +18,6 @@ function App() {
     });
   }, []);
 
-  console.log(dataQualityStates);
-
   return (
     <>
       {dataQualityStates && (

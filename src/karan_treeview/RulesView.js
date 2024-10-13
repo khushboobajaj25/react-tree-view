@@ -1,16 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
+import { AppContext } from "../App";
 import "../rules-view.css";
 import EditorView from "./BaselineRules/EditorView";
-import { AppContext } from "../App";
 import RulesTreeView from "./ColumnLevelRules/RulesTreeView";
-import { removeField } from "./utils";
 
 export default function RulesView() {
   const { dataQualityStates } = useContext(AppContext);
-  const [baseLineRules, setBaseLineRules] = React.useState(
-    dataQualityStates.baselineRules
-  );
+  const [baseLineRules, setBaseLineRules] = React.useState(dataQualityStates.baselineRules);
+
+  const handleSave = () => {
+    setBaseLineRules({ ...dataQualityStates.baselineRules });
+    console.log("Save button clicked");
+  };
 
   return (
     <div className="grid-container">
@@ -20,11 +22,9 @@ export default function RulesView() {
       </div>
       <div className="grid-item">
         {/* <EditorView /> */}
-        <EditorView
-          baseLineRules={baseLineRules}
-          setBaseLineRules={setBaseLineRules}
-        />
+        <EditorView baseLineRules={baseLineRules} setBaseLineRules={setBaseLineRules} />
       </div>
+      <button onClick={handleSave}>Submit</button>
     </div>
   );
 }
