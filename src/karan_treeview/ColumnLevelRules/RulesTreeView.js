@@ -52,6 +52,7 @@ function RulesTreeView() {
                 <CheckBoxIcon
                   className="checkbox-icon"
                   onClick={(e) => {
+                    element.metadata.checked = isSelected;
                     handleSelect(e);
                     handleCheckBoxSelect(element);
                     e.stopPropagation();

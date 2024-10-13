@@ -16,14 +16,12 @@ function App() {
       baselineRules: baseLinesRules,
       columnLevelRules: getTreeViewData(apiEditorData),
     });
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <>
       {dataQualityStates && (
-        <AppContext.Provider
-          value={{ dataQualityStates, setDataQualityStates }}
-        >
+        <AppContext.Provider value={{ dataQualityStates, setDataQualityStates }}>
           <RulesView />
         </AppContext.Provider>
       )}
