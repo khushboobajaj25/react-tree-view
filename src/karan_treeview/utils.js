@@ -34,7 +34,7 @@ export const getTreeViewData = (baseLineRules) => {
   const data = JSON.parse(JSON.stringify(baseLineRules));
   moveOptionalField(data, {}, "");
   removeField(data, "optional");
-  
+
   let id = 1;
   let treeData = {
     name: "",
@@ -48,6 +48,8 @@ export const getTreeViewData = (baseLineRules) => {
   };
 
   data["List_of_columns"].forEach((column) => {
+    if (!data[column]) return;
+
     const children = [];
     treeData.children[0].children.push({
       name: column,
