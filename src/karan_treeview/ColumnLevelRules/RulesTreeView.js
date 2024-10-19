@@ -6,19 +6,21 @@ import { IoMdArrowDropright } from "react-icons/io";
 import { AppContext } from "../../App";
 import "./styles.css";
 
-function RulesTreeView() {
+function RulesTreeView({ baseLineRules }) {
   const { dataQualityStates } = useContext(AppContext);
   const [selectedIds, setSelectedIds] = useState(dataQualityStates.columnLevelRules.children[0].metadata.selectedIds);
   const data = flattenTree(dataQualityStates.columnLevelRules);
-  const baseLineRules = dataQualityStates.baselineRules;
 
   const handleCheckBoxSelect = (e) => {
     const index = selectedIds.indexOf(e.id);
+    let updatedSelectedIds = [];
     if (index > -1) {
-      setSelectedIds(selectedIds.filter((id) => id !== e.id));
+      updatedSelectedIds = selectedIds.filter((id) => id !== e.id);
     } else {
-      setSelectedIds([...selectedIds, e.id]);
+      updatedSelectedIds = [...selectedIds, e.id];
     }
+    dataQualityStates.columnLevelRules.children[0].metadata.selectedIds = updatedSelectedIds;
+    setSelectedIds(updatedSelectedIds);
 
     if (baseLineRules[e.metadata.parent][e.name]) {
       delete baseLineRules[e.metadata.parent][e.name];

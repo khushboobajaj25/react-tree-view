@@ -1,8 +1,10 @@
 import { Editor } from "@monaco-editor/react";
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
 
-const EditorView = ({ baseLineRules, setBaseLineRules }) => {
-  const editorBaseLine = JSON.parse(JSON.stringify(baseLineRules));
+const EditorView = ({ setBaseLineRules }) => {
+  const { dataQualityStates } = useContext(AppContext);
+  const editorBaseLine = JSON.parse(JSON.stringify(dataQualityStates.baseLineRules));
   const handleEditorChange = (value) => {
     try {
       setBaseLineRules(JSON.parse(value));
