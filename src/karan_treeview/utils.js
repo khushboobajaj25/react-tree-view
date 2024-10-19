@@ -15,7 +15,11 @@ export const moveOptionalField = (obj, parentObj, parentKey) => {
     if (obj.hasOwnProperty(key)) {
       if (key === "optional") {
         Object.keys(obj[key]).forEach((optionalKey) => {
-          obj[key][optionalKey] = { ...obj[key][optionalKey], isOptional: true };
+          if (parentObj[parentKey][optionalKey]) {
+            obj[key][optionalKey] = parentObj[parentKey][optionalKey];
+          } else {
+            obj[key][optionalKey] = { ...obj[key][optionalKey], isOptional: true };
+          }
         });
         parentObj[parentKey] = { ...parentObj[parentKey], ...obj[key] };
         return;
@@ -30,7 +34,7 @@ export const getTreeViewData = (baseLineRules) => {
   const data = JSON.parse(JSON.stringify(baseLineRules));
   moveOptionalField(data, {}, "");
   removeField(data, "optional");
-
+  
   let id = 1;
   let treeData = {
     name: "",
@@ -70,11 +74,23 @@ export const getTreeViewData = (baseLineRules) => {
             parent: column,
           },
         });
-        if (!columnDetails["isOptional"]) {
+        if (!columnDetails["isOptional"] || columnDetails["isChecked"]) {
           treeData.children[0].metadata.selectedIds.push(id - 1);
         }
       }
     });
   });
   return treeData;
+};
+
+export const removeUncheckedObjs = (data) => {
+  Object.keys(data).forEach((key) => {
+    if (data[key]["isChecked"] === false) {
+      delete data[key];
+    } else if (key === "isChecked") {
+      delete data[key];
+    } else if (typeof data[key] === "object" && data[key] !== null) {
+      removeUncheckedObjs(data[key]);
+    }
+  });
 };
