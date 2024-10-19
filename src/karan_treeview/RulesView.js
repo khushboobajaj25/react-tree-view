@@ -8,12 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function RulesView() {
   const { dataQualityStates, setDataQualityStates } = useContext(AppContext);
-  const [baseLineRules, setBaseLineRules] = React.useState({ ...dataQualityStates.baseLineRules });
   const navigate = useNavigate();
 
   const handleSave = () => {
-    setBaseLineRules({ ...baseLineRules });
-    setDataQualityStates({ ...dataQualityStates, baseLineRules: { ...baseLineRules } });
+    setDataQualityStates({ ...dataQualityStates });
     console.log("Save button clicked");
   };
 
@@ -26,11 +24,11 @@ export default function RulesView() {
     <div className="grid-container">
       <div className="grid-item">{/* <DragAndDropDiv /> */}</div>
       <div className="grid-item">
-        <RulesTreeView baseLineRules={baseLineRules} />
+        <RulesTreeView />
       </div>
       <div className="grid-item">
         {/* <EditorView /> */}
-        <EditorView setBaseLineRules={setBaseLineRules} />
+        <EditorView />
       </div>
       <button onClick={handleSave}>Save</button>
       <button onClick={handleSubmit}>Execute</button>
