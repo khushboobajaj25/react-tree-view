@@ -37,7 +37,7 @@ export const getTreeViewData = (baseLineRules) => {
     children: [
       {
         name: "Column with Rules",
-        metadata: { id: id++, datasetFilter: data["dataset_filters"], selectedIds: [], parent: "", modalKey: "datasetFilter" },
+        metadata: { id: id++, dataset_filters: data["dataset_filters"], selectedIds: [], parent: null, modalKey: "dataset_filters" },
         children: [],
       },
     ],
@@ -49,10 +49,10 @@ export const getTreeViewData = (baseLineRules) => {
       name: column,
       metadata: {
         id: id++,
-        columnFilter: data[column]["column_filters"],
+        column_filters: data[column]["column_filters"],
         checked: !data[column]["isOptional"],
         parent: "Column with Rules",
-        modalKey: "columnFilter",
+        modalKey: "column_filters",
       },
       children: children,
     });
