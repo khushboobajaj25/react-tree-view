@@ -24,6 +24,7 @@ function RulesTreeView({ draggedItem, setDraggedItem, setEditorData }) {
 
   useEffect(() => {
     setSelectedIds(columnLevelRules.children[0].metadata.selectedIds);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataQualityStates]);
 
   const openModal = (element, key) => {
