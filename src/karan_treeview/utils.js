@@ -41,7 +41,7 @@ export const getTreeViewData = (baseLineRules) => {
     children: [
       {
         name: "Column with Rules",
-        metadata: { id: id++, dataset_filters: data["dataset_filters"], selectedIds: [], parent: null, modalKey: "dataset_filters" },
+        metadata: { id: id++, dataset_filters: data["dataset_filters"], selectedIds: [], parent: null, modalKey: "dataset_filters", includedKeys: [] },
         children: [],
       },
     ],
@@ -51,6 +51,7 @@ export const getTreeViewData = (baseLineRules) => {
     if (!data[column]) return;
 
     const children = [];
+    treeData.children[0].metadata.includedKeys.push(column);
     treeData.children[0].children.push({
       name: column,
       metadata: {
@@ -64,6 +65,8 @@ export const getTreeViewData = (baseLineRules) => {
     });
 
     Object.keys(data[column]).forEach((key) => {
+      if(key === "isChecked") return;
+
       const columnDetails = data[column][key];
       if (key !== "column_filters") {
         children.push({
