@@ -18,7 +18,7 @@ export const moveOptionalField = (obj, parentObj, parentKey) => {
           if (parentObj[parentKey][optionalKey]) {
             obj[key][optionalKey] = parentObj[parentKey][optionalKey];
           } else {
-            obj[key][optionalKey] = { ...obj[key][optionalKey], isOptional: true };
+            obj[key][optionalKey] = { ...obj[key][optionalKey], isOptional: true, isChecked: false };
           }
         });
         parentObj[parentKey] = { ...parentObj[parentKey], ...obj[key] };
