@@ -20,7 +20,7 @@ function RulesTreeView({ draggedItem, setDraggedItem, setEditorData }) {
   const [modalData, setModalData] = useState(null);
   const [eyeElement, setEyeElement] = useState(null);
   const [includedKeys, setIncludedKeys] = useState(columnLevelRules.children[0].metadata.includedKeys);
-  const initialIncludedKeys = JSON.parse(JSON.stringify(columnLevelRules.children[0].metadata.includedKeys));
+  const initialIncludedKeys = JSON.parse(JSON.stringify(columnLevelRules.children[0].metadata.initialIncludesKeys));
 
   useEffect(() => {
     setSelectedIds(columnLevelRules.children[0].metadata.selectedIds);
