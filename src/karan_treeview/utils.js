@@ -18,13 +18,24 @@ export const moveOptionalField = (obj, parentObj, parentKey) => {
           if (parentObj[parentKey][optionalKey]) {
             obj[key][optionalKey] = parentObj[parentKey][optionalKey];
           } else {
-            obj[key][optionalKey] = { ...obj[key][optionalKey], isOptional: true, isChecked: false };
+            obj[key][optionalKey] = { ...obj[key][optionalKey], isChecked: false };
           }
         });
         parentObj[parentKey] = { ...parentObj[parentKey], ...obj[key] };
         return;
       } else if (typeof obj[key] === "object" && obj[key] !== null) {
         moveOptionalField(obj[key], obj, key);
+      }
+    }
+  }
+};
+
+export const addIsCheckedField = (obj) => {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        if (obj[key]["isChecked"] === undefined) obj[key]["isChecked"] = true;
+        addIsCheckedField(obj[key]);
       }
     }
   }
@@ -41,7 +52,15 @@ export const getTreeViewData = (baseLineRules) => {
     children: [
       {
         name: "Column with Rules",
-        metadata: { id: id++, dataset_filters: data["dataset_filters"], selectedIds: [], parent: null, modalKey: "dataset_filters", includedKeys: [], initialIncludesKeys: [] },
+        metadata: {
+          id: id++,
+          dataset_filters: data["dataset_filters"],
+          selectedIds: [],
+          parent: null,
+          modalKey: "dataset_filters",
+          includedKeys: [],
+          initialIncludesKeys: [],
+        },
         children: [],
       },
     ],
@@ -78,11 +97,11 @@ export const getTreeViewData = (baseLineRules) => {
             id: id++,
             value: columnDetails["value"],
             filter: columnDetails["filter"],
-            checked: !columnDetails["isOptional"],
+            checked: columnDetails["isChecked"],
             parent: column,
           },
         });
-        if (!columnDetails["isOptional"] || columnDetails["isChecked"]) {
+        if (columnDetails["isChecked"]) {
           treeData.children[0].metadata.selectedIds.push(id - 1);
         }
       }
