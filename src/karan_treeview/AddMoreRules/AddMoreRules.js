@@ -3,7 +3,6 @@ import { addNewRulesData } from "./addNewRulesData";
 
 export default function AddMoreRules({ setDraggedItem }) {
   const onDragStart = (e, item) => {
-    console.log(item);
 
     setDraggedItem(item);
   };

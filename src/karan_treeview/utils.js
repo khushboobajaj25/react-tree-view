@@ -41,10 +41,14 @@ export const addIsCheckedField = (obj) => {
   }
 };
 
+
+
 export const getTreeViewData = (baseLineRules) => {
   const data = JSON.parse(JSON.stringify(baseLineRules));
   moveOptionalField(data, {}, "");
   removeField(data, "optional");
+  removeField(data, "hidden_columns");
+  addIsCheckedField(data)
 
   let id = 1;
   let treeData = {
@@ -68,7 +72,6 @@ export const getTreeViewData = (baseLineRules) => {
 
   data["List_of_columns"].forEach((column) => {
     if (!data[column]) return;
-
     const children = [];
     if (data[column]["isChecked"] || data[column]["isChecked"] === undefined) {
       treeData.children[0].metadata.includedKeys.push(column);
@@ -79,7 +82,7 @@ export const getTreeViewData = (baseLineRules) => {
       metadata: {
         id: id++,
         column_filters: data[column]["column_filters"],
-        checked: !data[column]["isOptional"],
+        checked: data[column]["isChecked"],
         parent: "Column with Rules",
         modalKey: "column_filters",
       },
@@ -118,6 +121,17 @@ export const removeUncheckedObjs = (data) => {
       delete data[key];
     } else if (typeof data[key] === "object" && data[key] !== null) {
       removeUncheckedObjs(data[key]);
+    }
+  });
+};
+export const removeHiddenObjs = (data) => {
+  Object.keys(data).forEach((key) => {
+    if (data[key]["isHidden"] === false) {
+      delete data[key];
+    } else if (key === "isHidden") {
+      delete data[key];
+    } else if (typeof data[key] === "object" && data[key] !== null) {
+      removeHiddenObjs(data[key]);
     }
   });
 };

@@ -54,3 +54,16 @@
 .checkbox .arrow--open {
     transform: rotate(90deg);
 }
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.filter-view {
+  flex: 1;
+}
+
+.tree-view {
+  flex: 3;
+  overflow-x: auto;
+}
